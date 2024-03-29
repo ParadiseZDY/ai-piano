@@ -29,17 +29,19 @@ def init_app():
     print("App initialization complete.")
 
 
+# 首页
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return '破晓！！！!'
 
 
+# 随机来一首
 @app.route('/rand')
 def rand_item():
     # 从 TOP_100 中随机抽取一个对象
     item = random.choice(app.config['TOP_100'])
     # 将对象转为 JSON 格式并返回
-    return jsonify(item)
+    return jsonify({'code': 200, 'data': item}), 200
 
 
 # top k
@@ -81,7 +83,7 @@ def post_json():
     return jsonify({'code': 200, 'data': retrunData}), 200
 
 
-@app.route('/aiCreation')
+@app.route('/aiCreation', methods=['POST'])
 def aiCreation():
     data = request.get_json(force=True)
     print(data)
@@ -91,13 +93,7 @@ def aiCreation():
 
     item = random.choice(app.config['TOP_100'])
     # 将对象转为 JSON 格式并返回
-    return jsonify(item)
-
-    resp = search.queryWithVector(topK, request.args.get("query"))
-    return jsonify(resp)
-
-
-# 分享-生成二维码
+    return jsonify({'code': 200, 'data': item}), 200
 
 
 if __name__ == '__main__':
