@@ -8,6 +8,8 @@ from flask import Flask, request, jsonify
 
 from ai.service import search
 
+from ai.web import api
+
 app = Flask(__name__)
 
 
@@ -44,12 +46,21 @@ def rand_item():
 @app.route('/similar', methods=['POST'])
 def post_json():
     data = request.get_json(force=True)
-
-    # 这里你可以处理你的数据
     print(data)
 
+    # 获取topK
+    rendered = data['rendered']
+    topNum = data['topK']
+    if topNum <= 0:
+        topNum = 5
+    if topNum > 10:
+        topNum = 10
+    topRendered = api.topK(rendered, topNum, app.config)
+
+    # 返回数据
     retrunData = {}
-    retrunData['rendered'] = data['rendered'];
+    retrunData['topK'] = topNum;
+    retrunData['rendered'] = topRendered;
 
     # 返回一个响应
     return jsonify({'code': 200, 'data': retrunData}), 200
@@ -61,6 +72,9 @@ def top():
     topK = request.args.get("topK", 10)
     resp = search.queryWithVector(topK, request.args.get("query"))
     return jsonify(resp)
+
+
+# 分享-生成二维码
 
 
 if __name__ == '__main__':
