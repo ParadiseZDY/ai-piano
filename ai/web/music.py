@@ -6,12 +6,9 @@ import random
 
 from flask import Flask, request, jsonify
 
-from ai.service import search
-
 from ai.web import api
 
 app = Flask(__name__)
-
 
 def init_app():
     # 1. 读取 json 文件
@@ -64,17 +61,6 @@ def post_json():
 
     # 返回一个响应
     return jsonify({'code': 200, 'data': retrunData}), 200
-
-
-# top k
-@app.route('/top')
-def top():
-    topK = request.args.get("topK", 10)
-    resp = search.queryWithVector(topK, request.args.get("query"))
-    return jsonify(resp)
-
-
-# 分享-生成二维码
 
 
 if __name__ == '__main__':
