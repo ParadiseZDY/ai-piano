@@ -56,8 +56,8 @@ def post_json():
 
     # 返回数据
     retrunData = {}
-    retrunData['topK'] = topNum;
-    retrunData['rendered'] = topRendered;
+    retrunData['topK'] = topNum
+    retrunData['rendered'] = topRendered
 
     # 返回一个响应
     return jsonify({'code': 200, 'data': retrunData}), 200
