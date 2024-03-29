@@ -5,10 +5,13 @@ import json
 import random
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from ai.web import api
 
 app = Flask(__name__)
+CORS(app)
+
 
 def init_app():
     # 1. 读取 json 文件
@@ -39,6 +42,21 @@ def rand_item():
     return jsonify(item)
 
 
+# top k
+@app.route('/top')
+def top():
+    topK = request.args.get("topK", 10)
+    if topK > 100:
+        topK = 10
+    top_N = app.config['TOP_100'][:topK]
+
+    # 返回数据
+    retrunData = {}
+    retrunData['topK'] = topK;
+    retrunData['rendered'] = top_N;
+    return jsonify({'code': 200, 'data': retrunData}), 200
+
+
 # 相似 top k
 @app.route('/similar', methods=['POST'])
 def post_json():
@@ -61,6 +79,25 @@ def post_json():
 
     # 返回一个响应
     return jsonify({'code': 200, 'data': retrunData}), 200
+
+
+@app.route('/aiCreation')
+def aiCreation():
+    data = request.get_json(force=True)
+    print(data)
+
+    # 获取topK
+    rendered = data['rendered']
+
+    item = random.choice(app.config['TOP_100'])
+    # 将对象转为 JSON 格式并返回
+    return jsonify(item)
+
+    resp = search.queryWithVector(topK, request.args.get("query"))
+    return jsonify(resp)
+
+
+# 分享-生成二维码
 
 
 if __name__ == '__main__':

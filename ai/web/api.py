@@ -14,6 +14,7 @@ def topK(rendered_array, topNum, config):
     # 返回对象数组
     return topK
 
+
 # json转成csv
 def json2csv():
     # 1. 读取 json 文件
