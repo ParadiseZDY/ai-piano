@@ -58,11 +58,9 @@ def post_json():
 # top k
 @app.route('/top')
 def top():
-    resp = search.queryWithVector(10, request.args.get("query"))
+    topK = request.args.get("topK", 10)
+    resp = search.queryWithVector(topK, request.args.get("query"))
     return jsonify(resp)
-
-
-# 分享-生成二维码
 
 
 if __name__ == '__main__':
